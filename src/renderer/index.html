@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; media-src 'self' blob:; connect-src 'self' ws: wss:; object-src 'none'; base-uri 'none'">
+  <title>Yansı</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="system-audio.js" defer></script>
+  <script src="stream-stats.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <button class="brand" data-go-view="screen" aria-label="Yansı ana sayfa"><span class="brand-symbol" aria-hidden="true">y</span><span>yansı<span class="brand-dot">.</span></span></button>
+      <div class="workspace-label">SENİN ALANIN, HER EKRANDA</div>
+      <nav class="navigation" aria-label="Ana gezinme">
+        <button class="nav-item active" data-view="screen" aria-current="page"><span data-icon="monitor"></span>Ekran <span class="nav-shortcut">01</span></button>
+        <button class="nav-item" data-view="files"><span data-icon="folder"></span>Dosyalar <span class="nav-shortcut">02</span></button>
+        <button class="nav-item" data-view="devices"><span data-icon="devices"></span>Cihazlar <span class="nav-shortcut">03</span></button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="privacy-note"><span data-icon="shield"></span><div><strong>Aynı ağda, sana yakın.</strong><p>Ekranın ve dosyaların yerel ağındaki cihazlarla paylaşılır.</p></div></div>
+        <div class="host-label"><span class="host-avatar">F</span><div><strong>Fedora masaüstü</strong><span id="server-sidebar-status">Bağlantı hazırlanıyor</span></div><span class="tiny-dot" id="sidebar-dot"></span></div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="page-header"><div><div class="eyebrow">YEREL PAYLAŞIM ALANI</div><h1 id="page-title">Ekranını büyüt.</h1><p id="page-description">Bir pencereyi ya da tüm ekranını, aynı ağdaki bir cihaza yansıt.</p></div><span class="status-pill" id="server-status"><span class="tiny-dot"></span>Hazırlanıyor</span></header>
+
+      <section class="view" id="view-screen" aria-label="Ekran paylaşımı">
+        <div class="screen-grid">
+          <section class="preview-card">
+            <div class="card-heading"><div class="label-with-icon"><span data-icon="monitor"></span><h2>Ekran önizlemesi</h2></div><label class="preview-toggle"><input type="checkbox" id="preview-toggle">PC önizlemesi</label><span class="subtle-badge" id="preview-badge">Paylaşım kapalı</span></div>
+            <div class="preview-stage" id="preview-stage">
+              <video id="screen-preview" autoplay muted playsinline hidden aria-label="Paylaşılan ekran önizlemesi"></video>
+              <div class="preview-empty" id="preview-empty"><div class="screen-illustration" aria-hidden="true"><span data-icon="monitor"></span><span class="illustration-spark spark-one"></span><span class="illustration-spark spark-two"></span><span class="illustration-spark spark-three"></span></div><h3 id="preview-empty-title">Büyük ekrana bir adım kaldı.</h3><p id="preview-empty-description">Paylaşacağın ekranı veya pencereyi seç.<br>Görüntü televizyonuna aktarılır.</p></div>
+              <span class="live-indicator" id="live-indicator" hidden><span></span>CANLI</span>
+            </div>
+            <div class="preview-controls"><div><strong id="sharing-label">Paylaşmaya hazırsın</strong><span id="sharing-description">Ekranı sen seçersin, paylaşımı sen bitirirsin.</span></div><button id="share-button" class="button primary"><span data-icon="share"></span>Ekranı paylaş</button></div>
+          </section>
+
+          <aside class="screen-side">
+            <section class="card connect-card"><div class="card-kicker"><span data-icon="link"></span>TELEVİZYONUNDAN BAĞLAN</div><h2>Bir adres.<br>Bir büyük ekran.</h2><p>Mi Box tarayıcısında aşağıdaki adresi aç. Gelen isteği buradan onayla.</p><div class="address-box"><span id="local-address">Bağlantı başlatılınca görünecek</span><button class="icon-button" id="copy-address" aria-label="Bağlantı adresini kopyala" title="Adresi kopyala" disabled><span data-icon="copy"></span></button></div><div id="address-choices" class="address-choices" hidden><label for="network-address">Ağ adresi</label><select id="network-address"></select></div><div class="connection-footnote"><span data-icon="wifi"></span><span>İki cihaz da aynı yerel ağda olmalı.</span></div><button class="button secondary server-toggle" id="server-toggle"><span data-icon="power"></span>Bağlantıyı başlat</button></section>
+            <section class="card quality-card">
+              <div class="card-heading"><h2>Görüntü ve ses</h2><span data-icon="sliders"></span></div>
+              <label class="stream-setting" for="stream-mode"><span>Yayın modu</span><select id="stream-mode"><option value="motion">Akıcı · video ve TV</option><option value="detail">Net metin · masaüstü</option></select></label>
+              <div class="quality-options" role="group" aria-label="Görüntü kalitesi"><button class="quality-option selected" data-quality="720" aria-pressed="true"><strong>720p</strong><span>30 kare/sn hedefi</span></button><button class="quality-option" data-quality="1080" aria-pressed="false"><strong>1080p</strong><span>30 kare/sn hedefi</span></button></div>
+              <p class="mode-description" id="mode-description">Video için kare hızına öncelik verir; gerekirse çözünürlük azalır.</p>
+              <label class="stream-setting" for="codec-preference"><span>TV uyumluluğu</span><select id="codec-preference"><option value="auto">Otomatik</option><option value="h264">H.264 tercih et</option></select></label>
+              <label class="system-audio-option" for="system-audio-toggle"><span class="system-audio-copy"><strong>Sistem sesini TV’ye aktar</strong><span id="system-audio-status" role="status" aria-live="polite">Ekran paylaşımıyla birlikte başlar.</span></span><input type="checkbox" id="system-audio-toggle" aria-describedby="system-audio-note" checked><span class="audio-switch" aria-hidden="true"></span></label>
+              <p class="setting-note" id="system-audio-note"><span data-icon="info"></span><span>Bilgisayarın tüm çıkış sesi aktarılır; seçtiğin pencereyle sınırlı değildir. TV’de “Sesi aç” düğmesine bas.</span></p>
+            </section>
+          </aside>
+        </div>
+        <details class="card stream-diagnostics" id="stream-diagnostics"><summary>Yayın durumu <span id="stats-summary">Bağlantı bekleniyor</span></summary><dl class="stats-grid"><div><dt>PC gönderimi</dt><dd id="stats-send-fps">—</dd></div><div><dt>TV’de çözülen</dt><dd id="stats-receive-fps">—</dd></div><div><dt>Ağ gidiş-dönüş</dt><dd id="stats-rtt">—</dd></div><div><dt>Görüntü veri hızı</dt><dd id="stats-bitrate">—</dd></div><div><dt>Kodlama</dt><dd id="stats-encode">—</dd></div><div><dt>TV çözme süresi</dt><dd id="stats-decode">—</dd></div></dl><p id="stats-note">Gerçek ölçümler bağlantı kurulduğunda görünür. Sabit ekranda kare sayısı düşebilir.</p></details>
+        <section class="card devices-summary"><div class="card-heading"><div class="label-with-icon"><span data-icon="devices"></span><h2>Bağlı cihazlar <span id="device-count" class="count-badge">0</span></h2></div><button class="text-button" data-go-view="devices">Tümünü gör <span aria-hidden="true">→</span></button></div><div id="screen-viewers" class="viewer-list"><div class="empty-inline"><span class="empty-icon" data-icon="devices"></span><div><strong>Henüz bir cihaz bağlanmadı</strong><p>Televizyonunda adresi açtığında bağlantı isteğini burada göreceksin.</p></div></div></div></section>
+      </section>
+
+      <section class="view" id="view-files" aria-label="Dosya paylaşımı" hidden>
+        <div class="files-grid"><section class="card"><div class="card-heading"><div class="label-with-icon"><span data-icon="upload"></span><h2>Bu bilgisayardan paylaş</h2></div><button class="button secondary small" id="choose-files"><span data-icon="plus"></span>Dosya seç</button></div><button class="file-dropzone" id="file-dropzone"><span data-icon="folder"></span><strong>Dosyalarını buraya bırak</strong><span>veya bilgisayarından seçmek için tıkla</span><small>Onayladığın cihazlar bu dosyaları indirebilir.</small></button><div id="shared-files" class="file-list"></div></section><section class="card"><div class="card-heading"><div class="label-with-icon"><span data-icon="download"></span><h2>Gelen dosyalar</h2></div><button class="text-button" id="open-downloads">Klasörü aç <span aria-hidden="true">↗</span></button></div><p class="section-description">Telefonundan ya da başka bir cihazdan gönderilen dosyalar burada görünür.</p><div id="received-files" class="file-list"></div></section></div>
+      </section>
+
+      <section class="view" id="view-devices" aria-label="Cihazlar" hidden><section class="card"><div class="card-heading"><div class="label-with-icon"><span data-icon="devices"></span><h2>Cihazların</h2></div><span class="subtle-badge">Onaylı bağlantı</span></div><p class="section-description">Ağındaki bir cihaz adresini açtığında bağlantıya sen izin verirsin.</p><div id="all-viewers" class="viewer-list"></div></section><div class="device-help"><span data-icon="link"></span><div><strong>Mi Box ile ilk bağlantı</strong><p>TV tarayıcısında bilgisayarının adresini aç, “Bağlan” düğmesine bas ve bu uygulamadan onayla. Ardından ekran paylaşımını başlat.</p></div></div></section>
+
+      <footer class="app-footer"><span>Birlikte, aynı ağda.</span><span>Yansı · Önizleme sürümü</span></footer>
+    </main>
+  </div>
+  <div class="toast-region" id="toast-region" role="status" aria-live="polite"></div>
+</body>
+</html>

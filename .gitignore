@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.local/
+test-results/
+*.log
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.idea/
+.vscode/

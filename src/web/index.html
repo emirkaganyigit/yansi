@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101c18">
+  <title>Yansı · Ekranın burada</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="viewer.js" defer></script>
+</head>
+<body>
+  <header class="receiver-header"><div class="brand"><span class="brand-symbol" aria-hidden="true">y</span><span>yansı<span class="brand-dot">.</span></span><span class="brand-label">EKRANIN BURADA</span></div><div class="header-actions"><span class="connection-status" id="connection-status"><span class="status-dot"></span>Bağlı değil</span><button class="button subtle" id="files-toggle" aria-expanded="false" aria-controls="files-panel"><span data-icon="folder"></span>Dosyalar</button></div></header>
+
+  <main>
+    <section class="screen-layout" aria-label="Ekran izleme">
+      <div class="player" id="player">
+        <video id="remote-video" autoplay playsinline muted hidden aria-label="Bilgisayardan gelen canlı görüntü ve ses"></video>
+        <div class="player-placeholder" id="player-placeholder"><div class="display-mark" aria-hidden="true"><span data-icon="monitor"></span><span class="display-spark"></span></div><div class="eyebrow">AYNI AĞDA, YAN YANA.</div><h1 id="player-title">Büyük ekrana hoş geldin.</h1><p id="player-description">Bilgisayarındaki ekranı burada izlemek için bağlan.<br>İsteği Yansı masaüstü uygulamasından onayla.</p><button class="button primary large" id="connect-button"><span data-icon="link"></span>Bilgisayara bağlan</button><p class="host-hint" id="host-hint">Yerel ağ üzerinden doğrudan bağlantı.</p></div>
+        <div class="video-overlay" id="video-overlay" hidden><span class="live-pill"><span></span>CANLI</span></div>
+        <div class="play-prompt" id="play-prompt" hidden><button class="button primary large" id="play-button"><span data-icon="play"></span>Görüntüyü başlat</button></div>
+      </div>
+      <div class="player-toolbar"><div class="screen-information"><span data-icon="monitor"></span><div><strong id="screen-label">Bilgisayar ekranı</strong><span id="screen-detail">Bağlantıyı başlatmak için “Bağlan” düğmesine bas.</span></div></div><div class="player-actions"><button class="button subtle" id="disconnect-button" hidden><span data-icon="power"></span>Bağlantıyı kes</button><button class="button subtle" id="audio-button" aria-pressed="false" title="Bilgisayardan sistem sesi gönderilmiyor" disabled><span data-icon="muted"></span>Sesi aç</button><button class="button subtle" id="fit-button" disabled><span data-icon="fit"></span>Ekranı doldur</button><button class="button subtle" id="fullscreen-button" disabled><span data-icon="fullscreen"></span>Tam ekran</button></div></div>
+      <p class="remote-hint"><span data-icon="arrows"></span>Ses için “Sesi aç”ı seç. Kumandayla yön tuşlarını kullan, seçmek için Tamam’a bas.</p>
+    </section>
+
+    <section class="files-panel" id="files-panel" aria-label="Dosyalar" hidden>
+      <div class="files-heading"><div><div class="eyebrow">CİHAZLARIN ARASINDA</div><h2>Dosyalarını yanında taşı.</h2><p>Bilgisayarındaki dosyaları indir veya bu cihazdan bir dosya gönder.</p></div><button class="button subtle" id="close-files"><span data-icon="close"></span>Kapat</button></div>
+      <div class="files-lock" id="files-lock"><span data-icon="shield"></span>Dosyaları görmek ve göndermek için önce bilgisayara bağlanıp onay al.</div>
+      <div class="files-columns" id="files-content" hidden>
+        <section class="file-card"><div class="file-card-header"><h3>İndirebileceğin dosyalar</h3><button class="button subtle small" id="refresh-files"><span data-icon="refresh"></span>Yenile</button></div><div id="download-list" class="download-list"></div></section>
+        <section class="file-card"><div class="file-card-header"><h3>Bilgisayara dosya gönder</h3><span data-icon="upload"></span></div><p class="upload-description">Seçtiğin dosyalar bilgisayarının Yansı indirme klasörüne kaydedilir.</p><input type="file" id="upload-input" multiple hidden><button class="button primary" id="select-upload"><span data-icon="plus"></span>Dosya seç</button><div class="upload-state" id="upload-state" hidden><span id="upload-label"></span><progress id="upload-progress" max="100" value="0" aria-label="Dosya gönderme ilerlemesi"></progress><div class="upload-progress-footer"><span id="upload-percent"></span><button class="text-button" id="cancel-upload">İptal et</button></div></div><p class="upload-result" id="upload-result" role="status"></p></section>
+      </div>
+    </section>
+  </main>
+  <footer class="receiver-footer"><span>Birlikte, aynı ağda.</span><span>Yansı · Yerel paylaşım</span></footer>
+  <div class="notice" id="notice" role="status" aria-live="polite" hidden></div>
+</body>
+</html>
